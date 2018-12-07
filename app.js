@@ -3,6 +3,10 @@ const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
 const errorController = require('./controllers/error');
+const sequelize = require('./helpers/database');
+const Product = require('./models/product');
+const User = require('./models/user');
+
 //This is for the handlebars template engine
 // const expressHbs = require('express-handlebars'); 
 
@@ -27,9 +31,44 @@ app.set('views', 'views');
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use((req, res, next) => {
+  User.findByPk(1)
+  .then(user => {
+    req.user = user;
+    next();
+  })
+  .catch(err => console.log(err));
+})
+
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);
 
 app.use(errorController.get404);
 
-app.listen(3000);
+Product.belongsTo(User), { constraints: true, onDelete: 'CASCADE' };
+User.hasMany(Product);
+
+sequelize
+// .sync({ force: true })
+.sync()
+.then(result => {
+  // console.log(result)
+  return User.findByPk(1)
+  // app.listen(3000);
+})
+.then(user => {
+  if (!user) {
+    return User.create({
+      name: 'Dan',
+      email: 'test@test.com'
+    })
+  }
+  return user
+})
+.then(u => {
+  // console.log(u);
+  app.listen(3000);
+})
+.catch(err => console.log(err));
+
+// app.listen(3000);
