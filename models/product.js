@@ -36,30 +36,48 @@
 // }
 
 //This is the model with Sequelize
-const Sequelize = require('sequelize');
+// const Sequelize = require('sequelize');
 
-const sequelize = require('../helpers/database');
+// const sequelize = require('../helpers/database');
 
-const Product = sequelize.define('product', {
-  id: {
-    type: Sequelize.INTEGER,
-    autoIncrement: true,
-    allowNull: false,
-    primaryKey: true
-  },
-  title: Sequelize.STRING,
-  price: {
-    type: Sequelize.DOUBLE,
-    allowNull: false
-  },
-  imageUrl: {
-    type: Sequelize.STRING,
-    allowNull: false
-  },
-  description: {
-    type: Sequelize.STRING,
-    allowNull: false
+// const Product = sequelize.define('product', {
+//   id: {
+//     type: Sequelize.INTEGER,
+//     autoIncrement: true,
+//     allowNull: false,
+//     primaryKey: true
+//   },
+//   title: Sequelize.STRING,
+//   price: {
+//     type: Sequelize.DOUBLE,
+//     allowNull: false
+//   },
+//   imageUrl: {
+//     type: Sequelize.STRING,
+//     allowNull: false
+//   },
+//   description: {
+//     type: Sequelize.STRING,
+//     allowNull: false
+//   }
+// });
+
+// module.exports = Product;
+
+//This is with mongoDB
+const getDb = require('../helpers/database').getDb;
+
+class Product {
+  constructor(title, price, description, imageUrl) {
+    this.title = title;
+    this.price = price;
+    this.description = description;
+    this.imageUrl = imageUrl;
   }
-});
+
+  save() {
+
+  }
+}
 
 module.exports = Product;
