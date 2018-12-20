@@ -12,13 +12,13 @@ const errorController = require('./controllers/error');
 // const OrderItem = require('./models/order-item');
 
 //Import Mongo
-const mongoConnect = require('./helpers/database');
+const mongoConnect = require('./helpers/database').mongoConnect;
 
 //This is for the handlebars template engine
 // const expressHbs = require('express-handlebars'); 
 
 const adminRoutes = require('./routes/admin');
-// const shopRoutes = require('./routes/shop');
+const shopRoutes = require('./routes/shop');
 
 const app = express();
 
@@ -45,10 +45,11 @@ app.use((req, res, next) => {
   //   next();
   // })
   // .catch(err => console.log(err));
+  next();
 })
 
 app.use('/admin', adminRoutes);
-// app.use(shopRoutes);
+app.use(shopRoutes);
 
 app.use(errorController.get404);
 

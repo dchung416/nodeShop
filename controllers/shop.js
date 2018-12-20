@@ -1,31 +1,32 @@
 const Product = require('../models/product');
 
 exports.getProducts = (req, res, next) => {
-  Product.findAll()
+  Product.fetchAll()
   .then(products => {
-    console.log('what is products', products)
     res.render('shop/product-list', {
       prods: products,
       docTitle: 'All Products',
       path: '/products',
     });
   })
-  .catch(err => console.log(err))
+  .catch(err => console.log(err));
+  // Product.findAll()
+  // .then(products => {
+  //   console.log('what is products', products)
+  //   res.render('shop/product-list', {
+  //     prods: products,
+  //     docTitle: 'All Products',
+  //     path: '/products',
+  //   });
+  // })
+  // .catch(err => console.log(err))
 }
 
 exports.getProduct = (req, res, next) => {
   const prodId = req.params.productId
-  // Product.findAll({where: {id: prodId}})
-  // .then(products => {
-  //   res.render('shop/product-detail', {
-  //     docTitle: products[0].title,
-  //     path: '/products',
-  //     product: products[0]
-  //   })
-  // })
-  // .catch(err => console.log(err))
-  Product.findByPk(prodId)
+  Product.findById(prodId)
   .then(product => {
+    console.log('controller product', product)
     res.render('shop/product-detail', {
       docTitle: product.title,
       path: '/products',
@@ -33,10 +34,19 @@ exports.getProduct = (req, res, next) => {
     })
   })
   .catch(err => console.log(err));
+  // Product.findByPk(prodId)
+  // .then(product => {
+  //   res.render('shop/product-detail', {
+  //     docTitle: product.title,
+  //     path: '/products',
+  //     product: product
+  //   })
+  // })
+  // .catch(err => console.log(err));
 }
 
 exports.getIndex = (req, res, next) => {
-  Product.findAll()
+  Product.fetchAll()
   .then(products => {
     console.log('what is products', products)
     res.render('shop/index', {
@@ -46,15 +56,16 @@ exports.getIndex = (req, res, next) => {
     });
   })
   .catch(err => console.log(err))
-  // Product.fetchAll()
-  // .then(([rows, fieldData]) => {
+  // Product.findAll()
+  // .then(products => {
+  //   console.log('what is products', products)
   //   res.render('shop/index', {
-  //     prods: rows,
+  //     prods: products,
   //     docTitle: 'Shop',
   //     path: '/',
-  //   })
+  //   });
   // })
-  // .catch(err => console.log(err));
+  // .catch(err => console.log(err))
 }
 
 exports.getCart = (req, res, next) => {
@@ -70,13 +81,6 @@ exports.getCart = (req, res, next) => {
     })
     .catch(err => console.log(err))
   })
-  // .then(products => {
-  //   res.render('shop/cart', {
-  //     docTitle: 'Your Cart',
-  //     path: '/cart',
-  //     products: products
-  //   });
-  // })
   .catch(err => console.log(err))
 }
 
@@ -174,8 +178,4 @@ exports.postDeleteCartProduct = (req, res, next) => {
     res.redirect('/cart');
   })
   .catch(err => console.log(err))
-  // Product.findById(prodId, product => {
-  //   Cart.deleteProduct(prodId, product.price);
-  //   res.redirect('/cart');
-  // });
 }
