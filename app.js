@@ -13,6 +13,7 @@ const errorController = require('./controllers/error');
 
 //Import Mongo
 const mongoConnect = require('./helpers/database').mongoConnect;
+const User = require('./models/user');
 
 //This is for the handlebars template engine
 // const expressHbs = require('express-handlebars'); 
@@ -45,7 +46,12 @@ app.use((req, res, next) => {
   //   next();
   // })
   // .catch(err => console.log(err));
-  next();
+  User.findById('5c1c4898ed30a3ec69b6a145')
+  .then(user => {
+    req.user = user;
+    next();
+  })
+  .catch(err => console.log(err))
 })
 
 app.use('/admin', adminRoutes);
