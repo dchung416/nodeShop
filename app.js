@@ -12,7 +12,8 @@ const errorController = require('./controllers/error');
 // const OrderItem = require('./models/order-item');
 
 //Import Mongo
-const mongoConnect = require('./helpers/database').mongoConnect;
+// const mongoConnect = require('./helpers/database').mongoConnect;
+const mongoose = require('mongoose');
 const User = require('./models/user');
 
 //This is for the handlebars template engine
@@ -46,7 +47,7 @@ app.use((req, res, next) => {
   //   next();
   // })
   // .catch(err => console.log(err));
-  User.findById('5c1c4898ed30a3ec69b6a145')
+  User.findById('5c256b495d4694d339af5a83')
   .then(user => {
     req.user = user;
     next();
@@ -59,9 +60,27 @@ app.use(shopRoutes);
 
 app.use(errorController.get404);
 
-mongoConnect(() => {
+// mongoConnect(() => {
+//   app.listen(3000);
+// })
+mongoose.connect('mongodb+srv://dchung:U8yPmcj9MBfCUZQ@cluster0-viq0l.mongodb.net/shop?retryWrites=true')
+.then(() => {
+  User.findOne()
+  .then(user => {
+    if (!user) {
+      const user = new User({
+        name: 'Dan',
+        email: 'test@test.com',
+        cart: {
+          items: []
+        }
+      });
+      user.save();
+    }
+  })
   app.listen(3000);
 })
+.catch(err => console.log(err))
 
 // Product.belongsTo(User, { constraints: true, onDelete: 'CASCADE' });
 // User.hasMany(Product);
